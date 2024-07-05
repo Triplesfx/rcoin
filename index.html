@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>Введите свой никнейм</h1>
+    <form id="nicknameForm">
+        <input type="text" id="nickname" name="nickname" placeholder="Никнейм" required minlength="3">
+        <button type="submit">Готово</button>
+    </form>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+
+        document.getElementById('nicknameForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const nickname = document.getElementById('nickname').value;
+
+            if (nickname.length >= 3 && /^[A-Za-z0-9]+$/.test(nickname)) {
+                tg.sendData(JSON.stringify({ nickname: nickname }));
+            } else {
+                alert('Никнейм должен содержать минимум 3 английские буквы.');
+            }
+        });
+
+        tg.expand(); // Расширяем приложение на весь экран
+    </script>
+</body>
+</html>
