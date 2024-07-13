@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #f0f0f0; /* светло-серый фон */
     text-align: center;
 }
 
@@ -8,13 +8,13 @@ body {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #e0e8f0; /* голубой фон */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    color: #333;
+    color: #333; /* темный текст */
 }
 
 input[type="text"] {
@@ -31,7 +31,7 @@ button[type="submit"] {
     width: 100%;
     padding: 10px;
     margin-top: 20px;
-    background-color: #0084ff;
+    background-color: #0084ff; /* голубая кнопка */
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -40,11 +40,11 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* темно-голубая при наведении */
 }
 
 .error-message {
-    color: #ff0000;
+    color: #ff0000; /* красный текст для ошибки */
     margin-top: 10px;
     font-size: 14px;
 }
