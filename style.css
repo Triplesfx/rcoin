@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0; /* светло-серый фон */
+    background-color: #ffffff; /* белый фон */
     text-align: center;
 }
 
@@ -8,7 +8,7 @@ body {
     max-width: 400px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #e0e8f0; /* голубой фон */
+    background-color: #e0e8f0; /* голубой фон для контейнера */
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
