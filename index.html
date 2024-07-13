@@ -9,10 +9,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Введите свой никнейм</h1>
+        <h1>Как тебя зовут?</h1>
         <form id="nicknameForm">
-            <input type="text" id="nickname" name="nickname" placeholder="Никнейм" required minlength="3">
-            <button type="submit">Готово</button>
+            <input type="text" id="nickname" name="nickname" placeholder="Напишите ваше имя" required minlength="3">
+            <button type="submit">Подтвердить</button>
         </form>
         <div id="error-message" class="error-message"></div>
     </div>
@@ -22,30 +22,17 @@
 
         document.getElementById('nicknameForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            const nickname = document.getElementById('nickname').value.trim();
+            const nickname = document.getElementById('nickname').value.trim().toLowerCase();
 
-            if (nickname.length >= 3 && /^[A-Za-z0-9]+$/.test(nickname)) {
-                checkNickname(nickname);
+            // Список разрешенных имен
+            const allowedNames = ["аня", "анна"];
+
+            if (allowedNames.includes(nickname)) {
+                tg.sendData(JSON.stringify({ nickname: nickname }));
             } else {
-                displayErrorMessage('Никнейм должен содержать минимум 3 английские буквы и цифры.');
+                displayErrorMessage('Glotai xyu!'); // Вывод ошибки
             }
         });
-
-        async function checkNickname(nickname) {
-            try {
-                const response = await fetch(`/check_nickname?nickname=${nickname}`);
-                const data = await response.json();
-
-                if (data.available) {
-                    tg.sendData(JSON.stringify({ nickname: nickname }));
-                } else {
-                    displayErrorMessage('Этот никнейм уже занят, выберите другой.');
-                }
-            } catch (error) {
-                console.error('Ошибка проверки никнейма:', error);
-                displayErrorMessage('Произошла ошибка, попробуйте позже.');
-            }
-        }
 
         function displayErrorMessage(message) {
             const errorMessage = document.getElementById('error-message');
