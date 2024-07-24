@@ -1,45 +1,141 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>Встреча с Богом</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Убирает прокрутку страницы из-за фонового изображения */
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            position: relative;
+            background: url('god.jpg') no-repeat center center fixed;
+            background-size: cover; /* Растягивает изображение, чтобы покрыть весь экран */
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            transition: transform 0.5s, opacity 0.5s;
+        }
+        .container.submitted {
+            transform: rotateY(180deg);
+            opacity: 0;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+                         0 0 15px rgba(255, 255, 255, 0.6),
+                         0 0 20px rgba(255, 255, 255, 0.4);
+        }
+        p {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: #e0e0e0;
+            font-size: 1em;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            resize: vertical;
+            margin-bottom: 15px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: #e0e0e0;
+            font-size: 1em;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            margin-bottom: 15px;
+        }
+        button {
+            background: #ffffff;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        button:hover {
+            background: #f0f0f0;
+            color: #000;
+        }
+        .message {
+            font-size: 1.5em;
+            color: #ffffff;
+            font-weight: bold;
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: visibility 0s, opacity 2s ease-in-out, transform 2s ease-in-out;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .message.show {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Как тебя зовут?</h1>
-        <form id="nicknameForm">
-            <input type="text" id="nickname" name="nickname" placeholder="Напишите ваше имя" required minlength="3">
-            <button type="submit">Подтвердить</button>
+    <div class="container" id="formContainer">
+        <h1>Встреча с Богом</h1>
+        <p>Запишите свои мысли, молитвы или пожелания. Это ваше пространство для размышлений и внутреннего общения.</p>
+        <form id="contactForm">
+            <textarea id="message" placeholder="Напишите здесь..." required></textarea>
+            <input type="text" id="contactInfo" placeholder="Способ с вами связаться (Почта; номер; Вк; Инста; Телеграмм)" required>
+            <button type="submit">Отправить</button>
         </form>
-        <div id="error-message" class="error-message"></div>
+        <div class="message" id="successMessage">Вас услышали, ждите ответа..</div>
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Предотвращаем стандартное действие формы
 
-        document.getElementById('nicknameForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            const nickname = document.getElementById('nickname').value.trim().toLowerCase();
-
-            // Список разрешенных имен
-            const allowedNames = ["аня", "анна"];
-
-            if (allowedNames.includes(nickname)) {
-                tg.sendData(JSON.stringify({ nickname: nickname }));
-            } else {
-                displayErrorMessage('Glotai xyu!'); // Вывод ошибки
+            // Проверка на заполнение полей
+            const message = document.getElementById('message').value.trim();
+            const contactInfo = document.getElementById('contactInfo').value.trim();
+            if (message === '' || contactInfo === '') {
+                alert('Пожалуйста, заполните все поля.');
+                return;
             }
+
+            // Имитация отправки данных (реальная отправка данных должна быть реализована через серверный код)
+            // В этом примере мы просто показываем сообщение
+            document.getElementById('formContainer').classList.add('submitted');
+            setTimeout(() => {
+                document.getElementById('formContainer').style.display = 'none';
+                const successMessage = document.getElementById('successMessage');
+                successMessage.classList.add('show');
+            }, 500); // Задержка для завершения анимации переворота
         });
-
-        function displayErrorMessage(message) {
-            const errorMessage = document.getElementById('error-message');
-            errorMessage.textContent = message;
-        }
-
-        tg.expand(); // Расширяем приложение на весь экран
     </script>
 </body>
 </html>
