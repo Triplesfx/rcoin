@@ -3,138 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Встреча с Богом</title>
+    <title>Анимация фона, кнопки и текста</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Убирает прокрутку страницы из-за фонового изображения */
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            text-align: center;
-            position: relative;
-            background: url('god.jpg') no-repeat center center fixed;
-            background-size: cover; /* Растягивает изображение, чтобы покрыть весь экран */
+            margin: 0;
+            background: black;
+            font-family: Arial, sans-serif;
+            transition: background 2s ease; /* Плавное изменение фона */
+            overflow: hidden; /* Скрытие анимации, выходящей за пределы экрана */
+            position: relative; /* Для позиционирования текстов и сердечек */
         }
+
         .container {
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
             position: relative;
-            transition: transform 0.5s, opacity 0.5s;
+            z-index: 2; /* Убедиться, что контейнер с кнопкой находится выше фоновых элементов */
         }
-        .container.submitted {
-            transform: rotateY(180deg);
-            opacity: 0;
-        }
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
-                         0 0 15px rgba(255, 255, 255, 0.6),
-                         0 0 20px rgba(255, 255, 255, 0.4);
-        }
-        p {
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-        textarea {
-            width: 100%;
-            height: 150px;
-            padding: 10px;
+
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            background: #6200ea;
             border: none;
-            border-radius: 8px;
-            background: #333;
-            color: #e0e0e0;
-            font-size: 1em;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            resize: vertical;
-            margin-bottom: 15px;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            background: #333;
-            color: #e0e0e0;
-            font-size: 1em;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            margin-bottom: 15px;
-        }
-        button {
-            background: #ffffff;
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-size: 1em;
+            border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
+            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease; /* Плавное изменение стилей кнопки */
         }
-        button:hover {
-            background: #f0f0f0;
-            color: #000;
+
+        .button.active {
+            background: red;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            transform: scale(1.2);
         }
-        .message {
-            font-size: 1.5em;
-            color: #ffffff;
-            font-weight: bold;
-            visibility: hidden;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: visibility 0s, opacity 2s ease-in-out, transform 2s ease-in-out;
+
+        .fade-in {
+            animation: fadeIn 2s forwards; /* Увеличено время для плавного появления фона */
+        }
+
+        .fade-out {
+            animation: fadeOut 2s forwards; /* Увеличено время для плавного исчезновения фона */
+        }
+
+        @keyframes fadeIn {
+            0% { background: black; }
+            100% { background: gray; } /* Фон становится серым */
+        }
+
+        @keyframes fadeOut {
+            0% { background: gray; }
+            100% { background: black; }
+        }
+
+        .hearts, .texts, .red-texts {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            display: none; /* Скрыть элементы по умолчанию */
+            z-index: 1; /* Чтобы элементы были поверх фона */
         }
-        .message.show {
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
+
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: red;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            opacity: 0;
+            animation: heartAnimation 2s ease-in-out infinite;
         }
+
+        @keyframes heartAnimation {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.5) translateY(-20px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) translateY(-40px);
+            }
+        }
+
+        .text {
+            position: absolute;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+            opacity: 0;
+            animation: textAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes textAnimation {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.2) translateY(-20px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) translateY(-40px);
+            }
+        }
+
+        .red-texts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 1; /* Чтобы тексты были поверх фона */
+        }
+
+        .red-text {
+            position: absolute;
+            font-size: 30px;
+            color: red;
+            font-weight: bold;
+            opacity: 0;
+            animation: redTextAnimation 3s ease-in-out infinite;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Эффект свечения текста */
+        }
+
+        @keyframes redTextAnimation {
+            0% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.2) translateY(-20px);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1) translateY(-40px);
+            }
+        }
+
+        /* Позиционирование сердечек случайным образом */
+        .heart:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+        .heart:nth-child(2) { top: 20%; left: 50%; animation-delay: 0.2s; }
+        .heart:nth-child(3) { top: 30%; left: 80%; animation-delay: 0.4s; }
+        .heart:nth-child(4) { top: 50%; left: 10%; animation-delay: 0.6s; }
+        .heart:nth-child(5) { top: 70%; left: 40%; animation-delay: 0.8s; }
+
+        /* Позиционирование текстов случайным образом */
+        .text:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+        .text:nth-child(2) { top: 30%; left: 40%; animation-delay: 0.3s; }
+        .text:nth-child(3) { top: 50%; left: 60%; animation-delay: 0.6s; }
+        .text:nth-child(4) { top: 70%; left: 20%; animation-delay: 0.9s; }
+        .text:nth-child(5) { top: 80%; left: 50%; animation-delay: 1.2s; }
+
+        /* Позиционирование красных текстов случайным образом */
+        .red-text:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .red-text:nth-child(2) { top: 40%; left: 30%; animation-delay: 0.3s; }
+        .red-text:nth-child(3) { top: 60%; left: 50%; animation-delay: 0.6s; }
+        .red-text:nth-child(4) { top: 80%; left: 70%; animation-delay: 0.9s; }
+        .red-text:nth-child(5) { top: 90%; left: 20%; animation-delay: 1.2s; }
+        .red-text:nth-child(6) { top: 30%; left: 70%; animation-delay: 1.5s; }
+        .red-text:nth-child(7) { top: 50%; left: 10%; animation-delay: 1.8s; }
+        .red-text:nth-child(8) { top: 60%; left: 40%; animation-delay: 2.1s; }
     </style>
 </head>
 <body>
-    <div class="container" id="formContainer">
-        <h1>Встреча с Богом</h1>
-        <p>Запишите свои мысли, молитвы или пожелания. Это ваше пространство для размышлений и внутреннего общения.</p>
-        <form id="contactForm">
-            <textarea id="message" placeholder="Напишите здесь..." required></textarea>
-            <input type="text" id="contactInfo" placeholder="Способ с вами связаться (Почта; номер; Вк; Инста; Телеграмм)" required>
-            <button type="submit">Отправить</button>
-        </form>
-        <div class="message" id="successMessage">Вас услышали, ждите ответа..</div>
+    <div class="hearts">
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+        <div class="heart"></div>
+    </div>
+    <div class="texts">
+        <div class="text">Прости меня Аня</div>
+        <div class="text">Я люблю тебя</div>
+    </div>
+    <div class="red-texts">
+        <div class="red-text">Прости меня Аня</div>
+        <div class="red-text">Я люблю тебя</div>
+        <div class="red-text">Прости меня Аня</div>
+        <div class="red-text">Я люблю тебя</div>
+        <div class="red-text">Прости меня Аня</div>
+        <div class="red-text">Я люблю тебя</div>
+        <div class="red-text">Прости меня Аня</div>
+        <div class="red-text">Я люблю тебя</div>
+    </div>
+    <div class="container">
+        <button class="button">Нажми на меня!</button>
     </div>
 
     <script>
-        document.getElementById('contactForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Предотвращаем стандартное действие формы
+        const button = document.querySelector('.button');
+        const body = document.querySelector('body');
+        const hearts = document.querySelector('.hearts');
+        const texts = document.querySelector('.texts');
+        const redTexts = document.querySelector('.red-texts');
 
-            // Проверка на заполнение полей
-            const message = document.getElementById('message').value.trim();
-            const contactInfo = document.getElementById('contactInfo').value.trim();
-            if (message === '' || contactInfo === '') {
-                alert('Пожалуйста, заполните все поля.');
-                return;
-            }
+        button.addEventListener('mousedown', () => {
+            body.classList.remove('fade-out');
+            body.classList.add('fade-in');
+            button.classList.add('active');
+            hearts.style.display = 'block'; // Показываем сердечки
+            texts.style.display = 'none'; // Скрываем белый текст
+            redTexts.style.display = 'flex'; // Показываем красный текст
+        });
 
-            // Имитация отправки данных (реальная отправка данных должна быть реализована через серверный код)
-            // В этом примере мы просто показываем сообщение
-            document.getElementById('formContainer').classList.add('submitted');
-            setTimeout(() => {
-                document.getElementById('formContainer').style.display = 'none';
-                const successMessage = document.getElementById('successMessage');
-                successMessage.classList.add('show');
-            }, 500); // Задержка для завершения анимации переворота
+        button.addEventListener('mouseup', () => {
+            body.classList.remove('fade-in');
+            body.classList.add('fade-out');
+            button.classList.remove('active');
+            hearts.style.display = 'none'; // Скрываем сердечки
+            texts.style.display = 'none'; // Скрываем белый текст
+            redTexts.style.display = 'none'; // Скрываем красный текст
+        });
+
+        button.addEventListener('mouseleave', () => {
+            body.classList.remove('fade-in');
+            body.classList.add('fade-out');
+            button.classList.remove('active');
+            hearts.style.display = 'none'; // Скрываем сердечки
+            texts.style.display = 'none'; // Скрываем белый текст
+            redTexts.style.display = 'none'; // Скрываем красный текст
         });
     </script>
 </body>
