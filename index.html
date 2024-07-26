@@ -13,14 +13,14 @@
             margin: 0;
             background: black;
             font-family: Arial, sans-serif;
-            transition: background 2s ease; /* Плавное изменение фона */
-            overflow: hidden; /* Скрытие анимации, выходящей за пределы экрана */
-            position: relative; /* Для позиционирования текстов и сердечек */
+            transition: background 2s ease;
+            overflow: hidden;
+            position: relative;
         }
 
         .container {
             position: relative;
-            z-index: 2; /* Убедиться, что контейнер с кнопкой находится выше фоновых элементов */
+            z-index: 2;
         }
 
         .button {
@@ -32,7 +32,7 @@
             border-radius: 5px;
             cursor: pointer;
             box-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
-            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease; /* Плавное изменение стилей кнопки */
+            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease, opacity 1s ease;
         }
 
         .button.active {
@@ -42,16 +42,16 @@
         }
 
         .fade-in {
-            animation: fadeIn 2s forwards; /* Увеличено время для плавного появления фона */
+            animation: fadeIn 2s forwards;
         }
 
         .fade-out {
-            animation: fadeOut 2s forwards; /* Увеличено время для плавного исчезновения фона */
+            animation: fadeOut 2s forwards;
         }
 
         @keyframes fadeIn {
             0% { background: black; }
-            100% { background: gray; } /* Фон становится серым */
+            100% { background: gray; }
         }
 
         @keyframes fadeOut {
@@ -67,8 +67,8 @@
             height: 100%;
             pointer-events: none;
             overflow: hidden;
-            display: none; /* Скрыть элементы по умолчанию */
-            z-index: 1; /* Чтобы элементы были поверх фона */
+            display: none;
+            z-index: 1;
         }
 
         .heart {
@@ -126,7 +126,7 @@
             justify-content: center;
             align-items: center;
             pointer-events: none;
-            z-index: 1; /* Чтобы тексты были поверх фона */
+            z-index: 1;
         }
 
         .red-text {
@@ -136,7 +136,7 @@
             font-weight: bold;
             opacity: 0;
             animation: redTextAnimation 3s ease-in-out infinite;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Эффект свечения текста */
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
         }
 
         @keyframes redTextAnimation {
@@ -152,6 +152,25 @@
                 opacity: 0;
                 transform: scale(1) translateY(-40px);
             }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @keyframes burnOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        .burn-out {
+            animation: burnOut 2s forwards;
         }
 
         /* Позиционирование сердечек случайным образом */
@@ -202,41 +221,63 @@
         <div class="red-text">Я люблю тебя</div>
     </div>
     <div class="container">
-        <button class="button">Нажми на меня!</button>
+        <button class="button" id="button1">Нажми на меня!</button>
+        <button class="button hidden" id="button2">Не жми на меня!</button>
     </div>
 
     <script>
-        const button = document.querySelector('.button');
+        const button1 = document.getElementById('button1');
+        const button2 = document.getElementById('button2');
         const body = document.querySelector('body');
         const hearts = document.querySelector('.hearts');
         const texts = document.querySelector('.texts');
         const redTexts = document.querySelector('.red-texts');
 
-        button.addEventListener('mousedown', () => {
+        const handleButtonPress = (buttonToHide, buttonToShow) => {
+            buttonToHide.classList.add('burn-out');
+            setTimeout(() => {
+                buttonToHide.classList.add('hidden');
+                buttonToHide.classList.remove('burn-out');
+                buttonToShow.classList.remove('hidden');
+            }, 2000); // Длительность анимации burn-out
+        };
+
+        button1.addEventListener('mousedown', () => {
             body.classList.remove('fade-out');
             body.classList.add('fade-in');
-            button.classList.add('active');
-            hearts.style.display = 'block'; // Показываем сердечки
-            texts.style.display = 'none'; // Скрываем белый текст
-            redTexts.style.display = 'flex'; // Показываем красный текст
+            button1.classList.add('active');
+            hearts.style.display = 'block';
+            texts.style.display = 'block';
+            redTexts.style.display = 'flex';
+            handleButtonPress(button1, button2);
         });
 
-        button.addEventListener('mouseup', () => {
+        button1.addEventListener('mouseup', () => {
             body.classList.remove('fade-in');
             body.classList.add('fade-out');
-            button.classList.remove('active');
-            hearts.style.display = 'none'; // Скрываем сердечки
-            texts.style.display = 'none'; // Скрываем белый текст
-            redTexts.style.display = 'none'; // Скрываем красный текст
+            button1.classList.remove('active');
+            hearts.style.display = 'none';
+            texts.style.display = 'none';
+            redTexts.style.display = 'none';
         });
 
-        button.addEventListener('mouseleave', () => {
+        button2.addEventListener('mousedown', () => {
+            body.classList.remove('fade-out');
+            body.classList.add('fade-in');
+            button2.classList.add('active');
+            hearts.style.display = 'block';
+            texts.style.display = 'block';
+            redTexts.style.display = 'flex';
+            handleButtonPress(button2, button1);
+        });
+
+        button2.addEventListener('mouseup', () => {
             body.classList.remove('fade-in');
             body.classList.add('fade-out');
-            button.classList.remove('active');
-            hearts.style.display = 'none'; // Скрываем сердечки
-            texts.style.display = 'none'; // Скрываем белый текст
-            redTexts.style.display = 'none'; // Скрываем красный текст
+            button2.classList.remove('active');
+            hearts.style.display = 'none';
+            texts.style.display = 'none';
+            redTexts.style.display = 'none';
         });
     </script>
 </body>
