@@ -18,10 +18,10 @@
         }
 
         .container {
+            position: absolute;
+            z-index: 2;
             display: flex;
             gap: 20px; /* Расстояние между кнопками */
-            position: relative;
-            z-index: 2;
         }
 
         .button {
@@ -35,8 +35,6 @@
             box-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
             transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease;
             animation: colorCycle 10s linear infinite;
-            position: relative; /* Убедимся, что кнопки могут быть кликабельны */
-            z-index: 3; /* Установим выше, чтобы кнопки были на переднем плане */
         }
 
         @keyframes colorCycle {
@@ -72,18 +70,42 @@
             100% { background: black; }
         }
 
-        .hearts, .texts, .red-texts {
-            position: absolute;
+        .image-container {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            overflow: hidden;
             display: none;
             z-index: 1;
+            transition: opacity 2s ease;
         }
 
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-fade-in {
+            animation: imageFadeIn 2s forwards;
+        }
+
+        .image-fade-out {
+            animation: imageFadeOut 2s forwards;
+        }
+
+        @keyframes imageFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes imageFadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Позиционирование сердечек случайным образом */
         .heart {
             position: absolute;
             width: 50px;
@@ -167,18 +189,21 @@
             }
         }
 
+        /* Позиционирование сердечек случайным образом */
         .heart:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
         .heart:nth-child(2) { top: 20%; left: 50%; animation-delay: 0.2s; }
         .heart:nth-child(3) { top: 30%; left: 80%; animation-delay: 0.4s; }
         .heart:nth-child(4) { top: 50%; left: 10%; animation-delay: 0.6s; }
         .heart:nth-child(5) { top: 70%; left: 40%; animation-delay: 0.8s; }
 
+        /* Позиционирование текстов случайным образом */
         .text:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
         .text:nth-child(2) { top: 30%; left: 40%; animation-delay: 0.3s; }
         .text:nth-child(3) { top: 50%; left: 60%; animation-delay: 0.6s; }
         .text:nth-child(4) { top: 70%; left: 20%; animation-delay: 0.9s; }
         .text:nth-child(5) { top: 80%; left: 50%; animation-delay: 1.2s; }
 
+        /* Позиционирование красных текстов случайным образом */
         .red-text:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
         .red-text:nth-child(2) { top: 40%; left: 30%; animation-delay: 0.3s; }
         .red-text:nth-child(3) { top: 60%; left: 50%; animation-delay: 0.6s; }
@@ -187,124 +212,56 @@
         .red-text:nth-child(6) { top: 30%; left: 70%; animation-delay: 1.5s; }
         .red-text:nth-child(7) { top: 50%; left: 10%; animation-delay: 1.8s; }
         .red-text:nth-child(8) { top: 60%; left: 40%; animation-delay: 2.1s; }
-
-        .flash {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            opacity: 0;
-            transition: opacity 0.05s;
-            z-index: 1;
-        }
-
-        .flash.active {
-            opacity: 1;
-        }
-
-        .video-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            z-index: 1;
-        }
-
-        .video-background.visible {
-            opacity: 1;
-        }
     </style>
 </head>
 <body>
-    <div class="hearts">
-        <div class="heart"></div>
-        <div class="heart"></div>
-        <div class="heart"></div>
-        <div class="heart"></div>
-        <div class="heart"></div>
-    </div>
-    <div class="texts">
-        <div class="text">Прости меня Аня</div>
-        <div class="text">Я люблю тебя</div>
-    </div>
-    <div class="red-texts">
-        <div class="red-text">Прости меня Аня</div>
-        <div class="red-text">Я люблю тебя</div>
-        <div class="red-text">Прости меня Аня</div>
-        <div class="red-text">Я люблю тебя</div>
-        <div class="red-text">Прости меня Аня</div>
-        <div class="red-text">Я люблю тебя</div>
-        <div class="red-text">Прости меня Аня</div>
-        <div class="red-text">Я люблю тебя</div>
-    </div>
     <div class="container">
-        <button class="button" id="button1">Нажми на меня!</button>
-        <button class="button" id="button2">Не жми на меня!</button>
-        <div class="flash"></div>
+        <button class="button" id="button1">На нажимай на меня</button>
+        <button class="button" id="button2">Нажми на меня</button>
     </div>
-    <video class="video-background" id="videoBackground" autoplay muted>
-        <source src="aziatka.mov" type="video/mp4">
-        Ваш браузер не поддерживает тег video.
-    </video>
+
+    <div class="image-container" id="imageContainer">
+        <img src="aziatka.jpg" alt="Image">
+    </div>
+
+    <audio id="screamAudio" src="scream.mp3"></audio>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const body = document.querySelector('body');
-            const hearts = document.querySelector('.hearts');
-            const texts = document.querySelector('.texts');
-            const redTexts = document.querySelector('.red-texts');
-            const button1 = document.getElementById('button1');
-            const button2 = document.getElementById('button2');
-            const video = document.getElementById('videoBackground');
-            const flash = document.querySelector('.flash');
-            const screamAudio = new Audio('scream.mp3');
+        const button1 = document.getElementById('button1');
+        const button2 = document.getElementById('button2');
+        const imageContainer = document.getElementById('imageContainer');
+        const screamAudio = document.getElementById('screamAudio');
 
-            button1.addEventListener('mousedown', () => {
-                body.classList.remove('fade-out');
-                body.classList.add('fade-in');
-                button1.classList.add('active');
-                hearts.style.display = 'block';
-                texts.style.display = 'block';
-                redTexts.style.display = 'flex';
-                button1.style.pointerEvents = 'none'; // Disable interaction with the first button
-                button2.style.pointerEvents = 'auto'; // Enable interaction with the second button
-            });
+        button1.addEventListener('mousedown', () => {
+            button1.classList.add('active');
+        });
 
-            button1.addEventListener('mouseup', () => {
-                body.classList.remove('fade-in');
-                body.classList.add('fade-out');
-                button1.classList.remove('active');
-                hearts.style.display = 'none';
-                texts.style.display = 'none';
-                redTexts.style.display = 'none';
-                button1.style.pointerEvents = 'auto'; // Enable interaction with the first button
-                button2.style.pointerEvents = 'auto'; // Ensure the second button remains clickable
-            });
+        button1.addEventListener('mouseup', () => {
+            button1.classList.remove('active');
+        });
 
-            button2.addEventListener('mousedown', () => {
-                body.classList.remove('fade-out');
-                body.classList.add('fade-in');
-                button2.classList.add('active');
-                screamAudio.play();
-                video.classList.add('visible');
-                flash.classList.add('active');
-                setTimeout(() => flash.classList.remove('active'), 50); // короткий эффект мигания
-            });
+        button2.addEventListener('mousedown', () => {
+            imageContainer.style.display = 'block';
+            imageContainer.classList.remove('image-fade-out');
+            imageContainer.classList.add('image-fade-in');
+            screamAudio.play();
+        });
 
-            button2.addEventListener('mouseup', () => {
-                body.classList.remove('fade-in');
-                body.classList.add('fade-out');
-                button2.classList.remove('active');
-                screamAudio.pause();
-                screamAudio.currentTime = 0;
-                video.classList.remove('visible');
-            });
+        button2.addEventListener('mouseup', () => {
+            imageContainer.classList.remove('image-fade-in');
+            imageContainer.classList.add('image-fade-out');
+            screamAudio.pause();
+            screamAudio.currentTime = 0; // Вернуть к началу
+        });
+
+        button2.addEventListener('mouseleave', () => {
+            imageContainer.classList.remove('image-fade-in');
+            imageContainer.classList.add('image-fade-out');
+            screamAudio.pause();
+            screamAudio.currentTime = 0; // Вернуть к началу
+            setTimeout(() => {
+                imageContainer.style.display = 'none';
+            }, 2000); // Убедитесь, что это время совпадает с временем анимации
         });
     </script>
 </body>
