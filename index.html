@@ -3,265 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Анимация фона, кнопки и текста</title>
+    <title>Random Text on Click</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
             margin: 0;
+            height: 100vh;
             background: black;
             font-family: Arial, sans-serif;
             overflow: hidden;
             position: relative;
-        }
-
-        .container {
-            position: absolute;
-            z-index: 2;
-            display: flex;
-            gap: 20px; /* Расстояние между кнопками */
-        }
-
-        .button {
-            padding: 15px 30px;
-            font-size: 18px;
-            color: #fff;
-            background: #6200ea;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
-            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease;
-            animation: colorCycle 10s linear infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        @keyframes colorCycle {
-            0% { background: red; box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
-            14% { background: orange; box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); }
-            28% { background: yellow; box-shadow: 0 0 15px rgba(255, 255, 0, 0.8); }
-            42% { background: green; box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); }
-            57% { background: blue; box-shadow: 0 0 15px rgba(0, 0, 255, 0.8); }
-            71% { background: indigo; box-shadow: 0 0 15px rgba(75, 0, 130, 0.8); }
-            85% { background: violet; box-shadow: 0 0 15px rgba(238, 130, 238, 0.8); }
-            100% { background: red; box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
-        }
-
-        .button.active {
-            transform: scale(1.2);
-        }
-
-        .fade-in {
-            animation: fadeIn 2s forwards;
-        }
-
-        .fade-out {
-            animation: fadeOut 2s forwards;
+        .glowing-text {
+            position: absolute;
+            font-size: 24px;
+            font-weight: bold;
+            opacity: 0;
+            white-space: nowrap;
+            animation: fadeIn 1s forwards, fadeOut 1s forwards 2s;
         }
 
         @keyframes fadeIn {
-            0% { background: black; }
-            100% { background: gray; }
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes fadeOut {
-            0% { background: gray; }
-            100% { background: black; }
-        }
-
-        .image-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none;
-            z-index: 1;
-            transition: opacity 2s ease;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .image-fade-in {
-            animation: imageFadeIn 2s forwards;
-        }
-
-        .image-fade-out {
-            animation: imageFadeOut 2s forwards;
-        }
-
-        @keyframes imageFadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes imageFadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* Позиционирование сердечек случайным образом */
-        .heart {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background: red;
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            opacity: 0;
-            animation: heartAnimation 2s ease-in-out infinite;
-        }
-
-        @keyframes heartAnimation {
             0% {
                 opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            50% {
-                opacity: 0.5;
-                transform: scale(1.5) translateY(-20px);
             }
             100% {
                 opacity: 0;
-                transform: scale(1) translateY(-40px);
             }
         }
 
-        .text {
-            position: absolute;
+        .white-glow {
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .red-glow {
+            color: red;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.3), 0 0 15px rgba(255, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .play-button {
+            padding: 20px 40px;
             font-size: 24px;
             color: white;
-            font-weight: bold;
+            background: black;
+            border: 2px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease;
             opacity: 0;
-            animation: textAnimation 3s ease-in-out infinite;
+            animation: fadeIn 1s forwards;
         }
 
-        @keyframes textAnimation {
+        .song-text {
+            font-size: 36px;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: fadeIn 1s forwards, pulse 1.5s infinite alternate;
+            text-align: center;
+        }
+
+        @keyframes pulse {
             0% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.2) translateY(-20px);
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
             }
             100% {
-                opacity: 0;
-                transform: scale(1) translateY(-40px);
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
             }
         }
 
-        .red-texts {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-            z-index: 1;
+        .final-text {
+            font-size: 36px;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: fadeIn 2s forwards;
         }
 
-        .red-text {
+        .hint-text {
             position: absolute;
-            font-size: 30px;
-            color: red;
-            font-weight: bold;
-            opacity: 0;
-            animation: redTextAnimation 3s ease-in-out infinite;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: white;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
         }
-
-        @keyframes redTextAnimation {
-            0% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            50% {
-                opacity: 0.8;
-                transform: scale(1.2) translateY(-20px);
-            }
-            100% {
-                opacity: 0;
-                transform: scale(1) translateY(-40px);
-            }
-        }
-
-        /* Позиционирование сердечек случайным образом */
-        .heart:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
-        .heart:nth-child(2) { top: 20%; left: 50%; animation-delay: 0.2s; }
-        .heart:nth-child(3) { top: 30%; left: 80%; animation-delay: 0.4s; }
-        .heart:nth-child(4) { top: 50%; left: 10%; animation-delay: 0.6s; }
-        .heart:nth-child(5) { top: 70%; left: 40%; animation-delay: 0.8s; }
-
-        /* Позиционирование текстов случайным образом */
-        .text:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
-        .text:nth-child(2) { top: 30%; left: 40%; animation-delay: 0.3s; }
-        .text:nth-child(3) { top: 50%; left: 60%; animation-delay: 0.6s; }
-        .text:nth-child(4) { top: 70%; left: 20%; animation-delay: 0.9s; }
-        .text:nth-child(5) { top: 80%; left: 50%; animation-delay: 1.2s; }
-
-        /* Позиционирование красных текстов случайным образом */
-        .red-text:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .red-text:nth-child(2) { top: 40%; left: 30%; animation-delay: 0.3s; }
-        .red-text:nth-child(3) { top: 60%; left: 50%; animation-delay: 0.6s; }
-        .red-text:nth-child(4) { top: 80%; left: 70%; animation-delay: 0.9s; }
-        .red-text:nth-child(5) { top: 90%; left: 20%; animation-delay: 1.2s; }
-        .red-text:nth-child(6) { top: 30%; left: 70%; animation-delay: 1.5s; }
-        .red-text:nth-child(7) { top: 50%; left: 10%; animation-delay: 1.8s; }
-        .red-text:nth-child(8) { top: 60%; left: 40%; animation-delay: 2.1s; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <button class="button" id="button1">На нажимай на меня</button>
-        <button class="button" id="button2">Нажми на меня</button>
+    <div class="hint-text">тыкай до конца пока не появится кнопка Play</div>
+    <div class="hidden" id="playButtonContainer">
+        <button class="play-button" id="playButton">Play</button>
+        <div class="song-text">Аня, послушай песню.</div>
     </div>
+    <div class="final-text hidden" id="finalText">Давай будем добрее, котенок</div>
 
-    <div class="image-container" id="imageContainer">
-        <img src="aziatka.jpg" alt="Image">
-    </div>
-
-    <audio id="screamAudio" src="scream.mp3"></audio>
+    <audio id="song" src="123.mp3"></audio>
 
     <script>
-        const button1 = document.getElementById('button1');
-        const button2 = document.getElementById('button2');
-        const imageContainer = document.getElementById('imageContainer');
-        const screamAudio = document.getElementById('screamAudio');
+        const texts = [
+            { text: "Я буду тянуться к солнцу меня не собьет дождь", color: "white" },
+            { text: "Я не хочу унижаться, но я не могу", color: "white" },
+            { text: "Сначала мое сердце полюбило тебя, потом тебя полюбили глаза.", color: "white" },
+            { text: "Я хочу взаимности и чтобы ты понимала что дорога мне", color: "white" },
+            { text: "Я хочу быть любимым", color: "white" },
+            { text: "Я хочу видеть то что я тебе нужен", color: "white" },
+            { text: "Я хочу взаимности", color: "white" },
+            { text: "Я люблю тебя", color: "red" },
+            { text: "Gonna hold you", color: "red" },
+            { text: "Никогда не груби тем кто не виноват в твоем гневе.", color: "white" },
+            { text: "Аня ты мне нравишься", color: "red" }
+        ];
 
-        button1.addEventListener('mousedown', () => {
-            button1.classList.add('active');
+        let textIndex = 0;
+
+        document.body.addEventListener('click', function(event) {
+            if (textIndex < texts.length) {
+                const currentText = texts[textIndex];
+                const textElement = document.createElement('div');
+                textElement.classList.add('glowing-text', currentText.color === 'red' ? 'red-glow' : 'white-glow');
+                textElement.textContent = currentText.text;
+                textElement.style.left = `${event.clientX}px`;
+                textElement.style.top = `${event.clientY}px`;
+
+                document.body.appendChild(textElement);
+
+                setTimeout(() => {
+                    textElement.remove();
+                }, 3000);
+
+                textIndex++;
+
+                if (textIndex === texts.length) {
+                    setTimeout(() => {
+                        document.getElementById('playButtonContainer').classList.remove('hidden');
+                        document.querySelector('.hint-text').style.display = 'none';
+                    }, 3000);
+                }
+            }
         });
 
-        button1.addEventListener('mouseup', () => {
-            button1.classList.remove('active');
-        });
+        const playButton = document.getElementById('playButton');
+        const song = document.getElementById('song');
+        const finalText = document.getElementById('finalText');
+        const playButtonContainer = document.getElementById('playButtonContainer');
 
-        button2.addEventListener('mousedown', () => {
-            imageContainer.style.display = 'block';
-            imageContainer.classList.remove('image-fade-out');
-            imageContainer.classList.add('image-fade-in');
-            screamAudio.play();
-        });
-
-        button2.addEventListener('mouseup', () => {
-            imageContainer.classList.remove('image-fade-in');
-            imageContainer.classList.add('image-fade-out');
-            screamAudio.pause();
-            screamAudio.currentTime = 0; // Вернуть к началу
-        });
-
-        button2.addEventListener('mouseleave', () => {
-            imageContainer.classList.remove('image-fade-in');
-            imageContainer.classList.add('image-fade-out');
-            screamAudio.pause();
-            screamAudio.currentTime = 0; // Вернуть к началу
+        playButton.addEventListener('click', () => {
+            song.play();
+            playButton.disabled = true;
+            playButton.style.opacity = 0.5;
+            
             setTimeout(() => {
-                imageContainer.style.display = 'none';
-            }, 2000); // Убедитесь, что это время совпадает с временем анимации
+                playButtonContainer.style.display = 'none';
+                finalText.classList.remove('hidden');
+            }, 37000); // 37 секунд
         });
     </script>
 </body>
