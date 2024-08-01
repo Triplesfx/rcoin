@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>I love You</title>
+    <title>Random Text on Click</title>
     <style>
         body {
             margin: 0;
@@ -80,18 +80,9 @@
             color: white;
             text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
             opacity: 0;
-            animation: fadeIn 1s forwards, pulse 1.5s infinite alternate;
+            animation: fadeIn 1s forwards;
             text-align: center;
             margin-top: 10px;
-        }
-
-        @keyframes pulse {
-            0% {
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
-            }
-            100% {
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
-            }
         }
 
         .final-text {
@@ -179,7 +170,7 @@
             setTimeout(() => {
                 playButtonContainer.style.display = 'none';
                 finalText.classList.remove('hidden');
-            }, 37000); // 37 секунд
+            }, song.duration * 1000); // Время длительности песни в миллисекундах
         });
     </script>
 </body>
