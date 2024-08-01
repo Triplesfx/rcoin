@@ -3,182 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Text on Click</title>
+    <title>Анимация фона, кнопки и текста</title>
     <style>
         body {
-            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
+            margin: 0;
             background: black;
             font-family: Arial, sans-serif;
             overflow: hidden;
             position: relative;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
-        .glowing-text {
+        .container {
             position: absolute;
-            font-size: 24px;
-            font-weight: bold;
-            opacity: 0;
-            white-space: nowrap;
-            animation: fadeIn 1s forwards, fadeOut 1s forwards 2s;
+            z-index: 2;
+            display: flex;
+            gap: 20px;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            background: #6200ea;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(98, 0, 234, 0.5);
+            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease;
+            animation: colorCycle 10s linear infinite;
+        }
+
+        @keyframes colorCycle {
+            0% { background: red; box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+            14% { background: orange; box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); }
+            28% { background: yellow; box-shadow: 0 0 15px rgba(255, 255, 0, 0.8); }
+            42% { background: green; box-shadow: 0 0 15px rgba(0, 255, 0, 0.8); }
+            57% { background: blue; box-shadow: 0 0 15px rgba(0, 0, 255, 0.8); }
+            71% { background: indigo; box-shadow: 0 0 15px rgba(75, 0, 130, 0.8); }
+            85% { background: violet; box-shadow: 0 0 15px rgba(238, 130, 238, 0.8); }
+            100% { background: red; box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+        }
+
+        .button.active {
+            transform: scale(1.2);
+        }
+
+        .fade-in {
+            animation: fadeIn 2s forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 2s forwards;
         }
 
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
+            0% { background: black; }
+            100% { background: gray; }
         }
 
         @keyframes fadeOut {
-            0% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-            }
+            0% { background: gray; }
+            100% { background: black; }
         }
 
-        .white-glow {
-            color: white;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
-        }
-
-        .red-glow {
-            color: red;
-            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.3), 0 0 15px rgba(255, 0, 0, 0.1);
-        }
-
-        .hidden {
+        .image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: none;
+            z-index: 1;
+            transition: opacity 2s ease;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .image-fade-in {
+            animation: imageFadeIn 2s forwards;
+        }
+
+        .image-fade-out {
+            animation: imageFadeOut 2s forwards;
+        }
+
+        @keyframes imageFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes imageFadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
         }
 
         .play-button {
+            display: none;
             padding: 20px 40px;
             font-size: 24px;
             color: white;
             background: black;
             border: 2px solid white;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-            transition: box-shadow 0.5s ease, transform 0.5s ease, background 0.5s ease;
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-        }
-
-        .song-text {
-            font-size: 36px;
-            color: white;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            animation: fadeIn 1s forwards, pulse 1.5s infinite alternate;
             text-align: center;
+            transition: opacity 1s ease, transform 1s ease;
         }
 
-        @keyframes pulse {
-            0% {
-                text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
-            }
-            100% {
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.5), 0 0 30px rgba(255, 255, 255, 0.3);
-            }
-        }
-
-        .final-text {
-            font-size: 36px;
-            color: white;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
-            opacity: 0;
+        .play-button.visible {
+            display: block;
             animation: fadeIn 2s forwards;
         }
 
-        .hint-text {
-            position: absolute;
-            top: 10px;
+        .message {
+            display: none;
+            position: fixed;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 14px;
+            font-size: 18px;
             color: white;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            animation: messageAnimation 2s infinite;
+        }
+
+        @keyframes messageAnimation {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .end-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            animation: endMessageAnimation 2s forwards;
+        }
+
+        @keyframes endMessageAnimation {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div class="hint-text">тыкай до конца пока не появится кнопка Play</div>
-    <div class="hidden" id="playButtonContainer">
-        <button class="play-button" id="playButton">Play</button>
-        <div class="song-text">Аня, послушай песню.</div>
+    <div class="container">
+        <button class="button" id="button1">На нажимай на меня</button>
+        <button class="button" id="button2">Нажми на меня</button>
     </div>
-    <div class="final-text hidden" id="finalText">Давай будем добрее, котенок</div>
+
+    <div class="image-container" id="imageContainer">
+        <img src="aziatka.jpg" alt="Image">
+    </div>
 
     <audio id="song" src="123.mp3"></audio>
 
+    <div class="play-button" id="playButton">Play</div>
+    <div class="message" id="message">Тыкай до конца пока не появится кнопка Play</div>
+    <div class="end-message" id="endMessage">Давай будем добрее котенок</div>
+
     <script>
+        const button1 = document.getElementById('button1');
+        const button2 = document.getElementById('button2');
+        const imageContainer = document.getElementById('imageContainer');
+        const song = document.getElementById('song');
+        const playButton = document.getElementById('playButton');
+        const message = document.getElementById('message');
+        const endMessage = document.getElementById('endMessage');
+
         const texts = [
-            { text: "Я буду тянуться к солнцу меня не собьет дождь", color: "white" },
-            { text: "Я не хочу унижаться, но я не могу", color: "white" },
-            { text: "Сначала мое сердце полюбило тебя, потом тебя полюбили глаза.", color: "white" },
-            { text: "Я хочу взаимности и чтобы ты понимала что дорога мне", color: "white" },
-            { text: "Я хочу быть любимым", color: "white" },
-            { text: "Я хочу видеть то что я тебе нужен", color: "white" },
-            { text: "Я хочу взаимности", color: "white" },
-            { text: "Я люблю тебя", color: "red" },
-            { text: "Gonna hold you", color: "red" },
-            { text: "Никогда не груби тем кто не виноват в твоем гневе.", color: "white" },
-            { text: "Аня ты мне нравишься", color: "red" }
+            "Я буду тянуться к солнцу меня не собьет дождь",
+            "Я не хочу унижаться, но я не могу",
+            "Сначала мое сердце полюбило тебя, потом тебя полюбили глаза.",
+            "Я хочу взаимности и чтобы ты понимала что дорога мне",
+            "Я хочу быть любимым",
+            "Я хочу видеть то что я тебе нужен",
+            "Я хочу взаимности",
+            "Я люблю тебя",
+            "Не вини себя часто. Просто иногда дождь идет на тех людей которые заслуживают солнца",
+            "Gonna hold you",
+            "Никогда не груби тем кто не виноват в твоем гневе.",
+            "Аня ты мне нравишься"
         ];
 
         let textIndex = 0;
 
-        document.body.addEventListener('click', function(event) {
-            if (textIndex < texts.length) {
-                const currentText = texts[textIndex];
-                const textElement = document.createElement('div');
-                textElement.classList.add('glowing-text', currentText.color === 'red' ? 'red-glow' : 'white-glow');
-                textElement.textContent = currentText.text;
-                textElement.style.left = `${event.clientX}px`;
-                textElement.style.top = `${event.clientY}px`;
-
-                document.body.appendChild(textElement);
-
-                setTimeout(() => {
-                    textElement.remove();
-                }, 3000);
-
-                textIndex++;
-
-                if (textIndex === texts.length) {
-                    setTimeout(() => {
-                        document.getElementById('playButtonContainer').classList.remove('hidden');
-                        document.querySelector('.hint-text').style.display = 'none';
-                    }, 3000);
-                }
-            }
+        button1.addEventListener('mousedown', () => {
+            button1.classList.add('active');
         });
 
-        const playButton = document.getElementById('playButton');
-        const song = document.getElementById('song');
-        const finalText = document.getElementById('finalText');
-        const playButtonContainer = document.getElementById('playButtonContainer');
+        button1.addEventListener('mouseup', () => {
+            button1.classList.remove('active');
+        });
+
+        button2.addEventListener('mousedown', () => {
+            imageContainer.style.display = 'block';
+            imageContainer.classList.remove('image-fade-out');
+            imageContainer.classList.add('image-fade-in');
+            song.play();
+            showNextText();
+        });
+
+        button2.addEventListener('mouseup', () => {
+            imageContainer.classList.remove('image-fade-in');
+            imageContainer.classList.add('image-fade-out');
+            song.pause();
+            song.currentTime = 0;
+        });
+
+        button2.addEventListener('mouseleave', () => {
+            imageContainer.classList.remove('image-fade-in');
+            imageContainer.classList.add('image-fade-out');
+            song.pause();
+            song.currentTime = 0;
+            setTimeout(() => {
+                imageContainer.style.display = 'none';
+            }, 2000);
+        });
+
+        function showNextText() {
+            if (textIndex < texts.length) {
+                message.innerText = texts[textIndex];
+                message.style.display = 'block';
+                textIndex++;
+                setTimeout(() => {
+                    message.style.display = 'none';
+                    setTimeout(showNextText, 500); // Задержка между текстами
+                }, 3000); // Время показа текста
+            } else {
+                setTimeout(() => {
+                    playButton.style.display = 'block';
+                    playButton.classList.add('visible');
+                }, 1000); // Задержка перед появлением кнопки
+            }
+        }
 
         playButton.addEventListener('click', () => {
             song.play();
-            playButton.disabled = true;
-            playButton.style.opacity = 0.5;
-            
+            playButton.style.display = 'none';
+            const duration = 37000; // Длительность песни в миллисекундах
             setTimeout(() => {
-                playButtonContainer.style.display = 'none';
-                finalText.classList.remove('hidden');
-            }, 37000); // 37 секунд
+                endMessage.style.display = 'block';
+                song.pause();
+                song.currentTime = 0;
+            }, duration);
         });
     </script>
 </body>
